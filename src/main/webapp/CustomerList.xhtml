@@ -13,12 +13,26 @@
 
             <h:form>
                 <h1><h:outputText value="List"/></h1>
-                <p:dataTable value="#{customerMBean.customers}" var="item">
+                <p:dataTable value="#{customerMBean.customers}" var="item"
+                             emptyMessage="Aucun client avec ce critère"
+                             paginator="true"
+                             rows="10"
+                             rowsPerPageTemplate="2,4,8,10"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+                    <f:facet name="header">
+                        <p:outputPanel>
+                           <h:outputText value="Recherche dans tous les champs de recherche"/>
+                           <p:inputText id="globalFilter" onkeyup="PF('customerTable').filter()"
+                                        style="width:150px"/>
+                        </p:outputPanel>
+                    </f:facet>
+                    
                     <p:column>
                         <f:facet name="header">
                             <h:outputText value="CustomerId"/>
                         </f:facet>
-                        <h:outputText value="#{item.customerId}"/>
+                        <h:link outcome="CustomerDetails?idCustomer=#{item.customerId}"
+                                value="#{item.customerId}"/>
                     </p:column>
                     <p:column>
                         <f:facet name="header">
