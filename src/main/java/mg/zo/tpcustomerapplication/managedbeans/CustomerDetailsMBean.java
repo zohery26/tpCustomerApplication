@@ -10,6 +10,9 @@ import javax.faces.view.ViewScoped;
 import java.io.Serializable;
 import java.util.List;
 import javax.ejb.EJB;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
 import mg.zo.tpcustomerapplication.entities.Customer;
 import mg.zo.tpcustomerapplication.entities.DiscountCode;
 import mg.zo.tpcustomerapplication.session.CustomerManager;
@@ -70,5 +73,32 @@ public class CustomerDetailsMBean implements Serializable {
    */
   public List<DiscountCode> getDiscountCodes() {
     return discountCodeManager.getAllDiscountCodes();
+  }
+  
+  /**
+   * getter pour la propriété discountCodeConverter.
+   */              
+  public Converter<DiscountCode> getDiscountCodeConverter() {
+    return new Converter<DiscountCode>() {
+      /**
+       * Convertit une String en DiscountCode.
+       *
+       * @param value valeur à convertir
+       */
+      @Override
+      public DiscountCode getAsObject(FacesContext context, UIComponent component, String value) {
+        return discountCodeManager.findById(value);
+      }
+
+      /**
+       * Convertit un DiscountCode en String.
+       *
+       * @param value valeur à convertir
+       */
+      @Override
+      public String getAsString(FacesContext context, UIComponent component, DiscountCode value) {
+        return value.getDiscountCode();
+      }
+    };
   }
 }
